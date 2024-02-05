@@ -1,33 +1,3 @@
-create table if not exists account_comments
-(
-    post_id    int                                 not null,
-    account_id int                                 not null,
-    comment    varchar(255)                        not null,
-    created_at timestamp default CURRENT_TIMESTAMP null,
-    updated_at timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
-    deleted_at int                                 null,
-    primary key (post_id, account_id)
-);
-
-create table if not exists account_likes
-(
-    post_id    int       not null,
-    account_id int       not null,
-    created_at timestamp null,
-    deleted_at timestamp null,
-    primary key (post_id, account_id)
-);
-
-create table if not exists candidate_posts
-(
-    post_id      int                                 not null,
-    candidate_id int                                 not null,
-    created_at   timestamp default CURRENT_TIMESTAMP null,
-    updated_at   timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
-    deleted_at   timestamp                           null,
-    primary key (post_id, candidate_id)
-);
-
 create table if not exists posts
 (
     ID          int auto_increment
@@ -84,6 +54,42 @@ create table if not exists candidates
         foreign key (account_id) references accounts (ID)
 );
 
+create table if not exists account_comments
+(
+    post_id      int                                 not null,
+    account_id   int                                 not null,
+    comment      varchar(255)                        not null,
+    created_at   timestamp default CURRENT_TIMESTAMP null,
+    updated_at   timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
+    deleted_at   int                                 null,
+    candidate_id int                                 not null,
+    primary key (post_id, account_id, candidate_id),
+    constraint account_comments_accounts_ID_fk
+        foreign key (account_id) references accounts (ID),
+    constraint account_comments_candidates_ID_fk
+        foreign key (candidate_id) references candidates (ID),
+    constraint account_comments_posts_ID_fk
+        foreign key (post_id) references posts (ID)
+);
+
+alter table accounts
+    add constraint accounts_candidates_fk
+        foreign key (voted_candidate_id) references candidates (ID);
+
+create table if not exists candidate_posts
+(
+    post_id      int                                 not null,
+    candidate_id int                                 not null,
+    created_at   timestamp default CURRENT_TIMESTAMP null,
+    updated_at   timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
+    deleted_at   timestamp                           null,
+    primary key (post_id, candidate_id),
+    constraint candidate_posts_candidates_ID_fk
+        foreign key (candidate_id) references candidates (ID),
+    constraint candidate_posts_posts_ID_fk
+        foreign key (post_id) references posts (ID)
+);
+
 create table if not exists election_periods
 (
     ID             int         not null
@@ -94,7 +100,3 @@ create table if not exists election_periods
     constraint election_period_users_username_fk
         foreign key (admin_username) references users (username)
 );
-
-alter table accounts
-    add constraint accounts_candidates_fk
-        foreign key (voted_candidate_id) references candidates (ID);
