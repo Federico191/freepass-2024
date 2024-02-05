@@ -56,7 +56,7 @@ create table if not exists accounts
         primary key,
     avatar             varchar(255)                         null,
     username           varchar(20)                          not null,
-    "birth_date"       date                                 not null,
+    birth_date         date                                 not null,
     is_voted           tinyint(1) default 0                 null,
     voted_candidate_id int                                  null,
     created_at         timestamp  default CURRENT_TIMESTAMP null,
