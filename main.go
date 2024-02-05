@@ -1,1 +1,5 @@
-package freepass_2024
+package main
+
+func main() {
+
+}
