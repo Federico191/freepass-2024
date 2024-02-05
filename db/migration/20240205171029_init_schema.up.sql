@@ -18,14 +18,14 @@ create table if not exists account_likes
     primary key (post_id, account_id)
 );
 
-create table if not exists account_posts
+create table if not exists candidate_posts
 (
-    post_id    int                                 not null,
-    account_id int                                 not null,
-    created_at timestamp default CURRENT_TIMESTAMP null,
-    updated_at timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
-    deleted_at timestamp                           null,
-    primary key (post_id, account_id)
+    post_id      int                                 not null,
+    candidate_id int                                 not null,
+    created_at   timestamp default CURRENT_TIMESTAMP null,
+    updated_at   timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
+    deleted_at   timestamp                           null,
+    primary key (post_id, candidate_id)
 );
 
 create table if not exists posts
@@ -57,17 +57,33 @@ create table if not exists accounts
     avatar             varchar(255)                         null,
     username           varchar(20)                          not null,
     is_voted           tinyint(1) default 0                 null,
-    `candidate ID`     int                                  null,
     voted_candidate_id int                                  null,
     created_at         timestamp  default CURRENT_TIMESTAMP null,
     updated_at         timestamp  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
-    constraint accounts_pk
-        unique (`candidate ID`),
     constraint accounts_users_username_fk
         foreign key (username) references users (username)
 );
 
-create table if not exists election_period
+create table if not exists candidates
+(
+    ID              int auto_increment
+        primary key,
+    election_number int                                 not null,
+    account_id      int                                 null,
+    vision          text                                not null,
+    mission         text                                not null,
+    achievement     text                                null,
+    experience      text                                null,
+    leader_id       int                                 null,
+    created_at      timestamp default CURRENT_TIMESTAMP null,
+    updated_at      timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
+    constraint candidates_uk
+        unique (leader_id, account_id),
+    constraint candidates_accounts_ID_fk
+        foreign key (account_id) references accounts (ID)
+);
+
+create table if not exists election_periods
 (
     ID             int         not null
         primary key,
@@ -78,3 +94,6 @@ create table if not exists election_period
         foreign key (admin_username) references users (username)
 );
 
+alter table accounts
+    add constraint accounts_candidates_fk
+        foreign key (voted_candidate_id) references candidates (ID);

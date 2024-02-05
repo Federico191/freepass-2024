@@ -1,8 +1,8 @@
-drop table account_comments;
-drop table account_likes;
-drop table account_posts;
-drop table accounts;
-drop table election_period;
-drop table posts;
-drop table users;
-
+drop table if exists account_comments;
+drop table if exists account_likes;
+drop table if exists candidate_posts;
+drop table if exists candidates;
+drop table if exists accounts;
+drop table if exists election_period;
+drop table if exists posts;
+drop table if exists users;
