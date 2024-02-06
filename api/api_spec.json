@@ -298,7 +298,6 @@
                   "avatar": {
                     "type": "string"
                   }
-
                 }
               }
             }
@@ -588,8 +587,568 @@
         }
       }
     },
-    "/api/admin/": {
-
+    "/api/admin/accounts/{account_id}/candidates": {
+      "post": {
+        "tags": [
+          "Admin API"
+        ],
+        "description": "Promote user to candidate",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "election_number": {
+                    "type": "integer",
+                    "required": true
+                  },
+                  "leader_id": {
+                    "type": "integer",
+                    "description": "for vice only"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success promote user to candidate",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ID": {
+                      "type": "integer"
+                    },
+                    "account_id": {
+                      "type": "integer"
+                    },
+                    "leader_id": {
+                      "type": "integer"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "deleted_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/candidate/{candidate_id}/post": {
+      "get": {
+        "tags": [
+          "Admin API"
+        ],
+        "description": "View candidate`s posts",
+        "parameters": [
+          {
+            "name": "candidate_id",
+            "in": "path"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success view candidate`s posts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": [
+                    {}
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/election": {
+      "post": {
+        "tags": [
+          "Admin API"
+        ],
+        "description": "Set start and end dates for election period",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "start_time": {
+                    "type": "string",
+                    "required": true,
+                    "format": "date-time"
+                  },
+                  "end_time": {
+                    "type": "string",
+                    "required": true,
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success set start and end date election periods",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ID": {
+                      "type": "integer"
+                    },
+                    "start_time": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "end_time": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "admin_username": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/accounts/{account_id}": {
+      "delete": {
+        "tags": [
+          "Admin API"
+        ],
+        "description": "Delete user/account",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete user/account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/candidates/{candidate_id}": {
+      "delete": {
+        "tags": [
+          "Admin API"
+        ],
+        "description": "Delete candidate",
+        "parameters": [
+          {
+            "name": "candidate_id",
+            "in": "path",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete candidate",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/candidates/{candidate_id}/posts/{post_id}": {
+      "delete": {
+        "tags": [
+          "Admin API"
+        ],
+        "description": "Delete candidate`s posts",
+        "parameters": [
+          {
+            "name": "candidate_id",
+            "in": "path",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "post_id",
+            "in": "path",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete candidate`s posts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/candidates/{candidate_id}/posts/{post_id}/comments/{account_id}/": {
+      "delete": {
+        "tags": [
+          "Admin API"
+        ],
+        "description": "Delete user`s comment",
+        "parameters": [
+          {
+            "name": "candidate_id",
+            "in": "path",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "post_id",
+            "in": "path",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete user`s comment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/candidates/posts": {
+      "post": {
+        "tags": [
+          "Candidate API"
+        ],
+        "description": "Create a post",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pic_url": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success create a posts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ID": {
+                      "type": "integer"
+                    },
+                    "candidate_id": {
+                      "type": "integer"
+                    },
+                    "pic_url": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "deleted_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/candidates/posts/{post_id}": {
+      "get": {
+        "tags": [
+          "Candidate API"
+        ],
+        "description": "View posts",
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success view post",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ID": {
+                      "type": "integer"
+                    },
+                    "candidate_id": {
+                      "type": "integer"
+                    },
+                    "pic_url": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "deleted_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Candidate API"
+        ],
+        "description": "Update/edit post",
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pic_url": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success edit post",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ID": {
+                      "type": "integer"
+                    },
+                    "candidate_id": {
+                      "type": "integer"
+                    },
+                    "pic_url": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "deleted_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Candidate API"
+        ],
+        "description": "Delete post",
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete post",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

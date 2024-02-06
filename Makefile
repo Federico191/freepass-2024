@@ -15,4 +15,4 @@ migrateup :
 migratedown :
 	migrate -database "mysql://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@tcp(${DATABASE_HOST}:${DATABASE_PORT})/${DATABASE_NAME}" -path db/migration down
 
-.PHONY: mysql createdb dropdb
+.PHONY: mysql createdb dropdb migrateup migratedown
