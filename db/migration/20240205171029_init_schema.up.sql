@@ -95,6 +95,10 @@ create table if not exists election_periods
         foreign key (admin_username) references users (username)
 );
 
+alter table candidates
+    add constraint candidate_vice_fk
+        foreign key (leader_id) references candidates (ID);
+
 ALTER TABLE candidates
     ADD INDEX idx_election_number (election_number);
 
