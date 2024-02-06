@@ -22,15 +22,16 @@ create table if not exists users
 
 create table if not exists accounts
 (
-    ID                 int auto_increment
+    ID                    int auto_increment
         primary key,
-    avatar             varchar(255)                         null,
-    username           varchar(20)                          not null,
-    birth_date         date                                 not null,
-    is_voted           tinyint(1) default 0                 null,
-    voted_candidate_id int                                  null,
-    created_at         timestamp  default CURRENT_TIMESTAMP null,
-    updated_at         timestamp  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
+    avatar                varchar(255)                         null,
+    username              varchar(20)                          not null,
+    birth_date            date                                 not null,
+    is_voted              tinyint(1) default 0                 null,
+    voted_election_number int                                  null,
+    created_at            timestamp  default CURRENT_TIMESTAMP null,
+    updated_at            timestamp  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
+    deleted_at            timestamp                            null,
     constraint accounts_users_username_fk
         foreign key (username) references users (username)
 );
@@ -39,17 +40,14 @@ create table if not exists candidates
 (
     ID              int auto_increment
         primary key,
-    election_number int                                 not null,
-    account_id      int                                 null,
-    vision          text                                not null,
-    mission         text                                not null,
-    achievement     text                                null,
-    experience      text                                null,
+    election_number int                                 null,
+    account_id      int                                 not null,
     leader_id       int                                 null,
     created_at      timestamp default CURRENT_TIMESTAMP null,
     updated_at      timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
+    deleted_at      timestamp                           null,
     constraint candidates_uk
-        unique (leader_id, account_id),
+        unique (account_id, election_number),
     constraint candidates_accounts_ID_fk
         foreign key (account_id) references accounts (ID)
 );
@@ -58,11 +56,11 @@ create table if not exists account_comments
 (
     post_id      int                                 not null,
     account_id   int                                 not null,
+    candidate_id int                                 not null,
     comment      varchar(255)                        not null,
     created_at   timestamp default CURRENT_TIMESTAMP null,
     updated_at   timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
     deleted_at   int                                 null,
-    candidate_id int                                 not null,
     primary key (post_id, account_id, candidate_id),
     constraint account_comments_accounts_ID_fk
         foreign key (account_id) references accounts (ID),
@@ -71,10 +69,6 @@ create table if not exists account_comments
     constraint account_comments_posts_ID_fk
         foreign key (post_id) references posts (ID)
 );
-
-alter table accounts
-    add constraint accounts_candidates_fk
-        foreign key (voted_candidate_id) references candidates (ID);
 
 create table if not exists candidate_posts
 (
@@ -100,3 +94,10 @@ create table if not exists election_periods
     constraint election_period_users_username_fk
         foreign key (admin_username) references users (username)
 );
+
+ALTER TABLE candidates
+    ADD INDEX idx_election_number (election_number);
+
+alter table accounts
+    add constraint accounts_candidates_fk
+        foreign key (voted_election_number) references candidates (election_number);
