@@ -1,8 +1,5 @@
 drop table if exists account_comments;
 
-alter table accounts
-    drop foreign key accounts_candidates_fk;
-
 drop table if exists candidate_posts;
 
 drop table if exists candidates;

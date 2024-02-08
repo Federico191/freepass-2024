@@ -27,8 +27,6 @@ create table if not exists accounts
     avatar                varchar(255)                         null,
     username              varchar(20)                          not null,
     birth_date            date                                 not null,
-    is_voted              tinyint(1) default 0                 null,
-    voted_election_number int                                  null,
     created_at            timestamp  default CURRENT_TIMESTAMP null,
     updated_at            timestamp  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
     deleted_at            timestamp                            null,
@@ -101,7 +99,3 @@ alter table candidates
 
 ALTER TABLE candidates
     ADD INDEX idx_election_number (election_number);
-
-alter table accounts
-    add constraint accounts_candidates_fk
-        foreign key (voted_election_number) references candidates (election_number);
